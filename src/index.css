@@ -1,0 +1,268 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-fin-dark:    #09090b;
+  --color-fin-blue:    #ef4444;
+  --color-fin-indigo:  #dc2626;
+  --color-fin-emerald: #10b981;
+  --color-fin-rose:    #f43f5e;
+  --color-fin-amber:   #f59e0b;
+}
+
+/* ─── Keyframes ─────────────────────────────────────────── */
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes soft-glow {
+  0%, 100% { box-shadow: 0 0 20px -4px rgba(239,68,68,0.2); }
+  50%       { box-shadow: 0 0 32px -4px rgba(239,68,68,0.4); }
+}
+
+/* ─── Base ───────────────────────────────────────────────── */
+@layer base {
+  body {
+    @apply font-sans text-slate-200 bg-fin-dark antialiased;
+    /*
+      Textura de ruído sutil + gradiente direcional assimétrico.
+      Mais intencionado e menos genérico que radial nos cantos.
+    */
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E"),
+      linear-gradient(155deg, rgba(220,38,38,0.06) 0%, transparent 45%),
+      linear-gradient(335deg, rgba(239,68,68,0.03) 0%, transparent 55%);
+    background-attachment: fixed;
+    background-size: 200px 200px, 100% 100%, 100% 100%;
+    zoom: 0.8;
+  }
+
+  /* Scrollbar global */
+  ::-webkit-scrollbar       { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.07);
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(239,68,68,0.3);
+  }
+
+  ::selection {
+    background: rgba(239,68,68,0.22);
+    color: #fca5a5;
+  }
+}
+
+/* ─── Utilities ──────────────────────────────────────────── */
+@layer utilities {
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  .pt-safe { padding-top: env(safe-area-inset-top); }
+
+  /* Scrollbar para modais e painéis com overflow */
+  .custom-scrollbar::-webkit-scrollbar       { width: 3px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.06);
+    border-radius: 99px;
+  }
+
+  /* ── Sistema de elevação — 3 níveis ─────────────────────── */
+
+  /* Nível 1: superfície base */
+  .glass-panel {
+    @apply bg-white/[0.025] backdrop-blur-[20px] transition-all duration-500;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background-clip: padding-box;
+    position: relative;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.05) inset,
+      0 8px 32px rgba(0,0,0,0.4);
+  }
+  .glass-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg,
+      rgba(255,255,255,0.08) 0%,
+      rgba(255,255,255,0.015) 50%,
+      transparent 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .glass-panel:hover {
+    background: rgba(255,255,255,0.033);
+    border-color: rgba(255,255,255,0.1);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.07) inset,
+      0 20px 56px rgba(0,0,0,0.45);
+  }
+
+  /* Nível 2: card destacado */
+  .glass-panel-raised {
+    @apply bg-white/[0.04] backdrop-blur-[24px] transition-all duration-500;
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background-clip: padding-box;
+    position: relative;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 16px 48px rgba(0,0,0,0.5),
+      0 0 0 1px rgba(0,0,0,0.15);
+  }
+
+  /* Nível 3: modal / overlay */
+  .glass-panel-modal {
+    @apply bg-[#0d0d10]/92 backdrop-blur-[32px] transition-all duration-500;
+    border-radius: 28px;
+    border: 1px solid rgba(255,255,255,0.09);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.06) inset,
+      0 32px 80px rgba(0,0,0,0.65),
+      0 0 100px rgba(239,68,68,0.04);
+  }
+
+  /* ── Glow Shadows ───────────────────────────────────────── */
+  .shadow-glow-blue    { box-shadow: 0 0 40px -14px rgba(239,68,68,0.28); }
+  .shadow-glow-purple  { box-shadow: 0 0 40px -14px rgba(220,38,38,0.28); }
+  .shadow-glow-amber   { box-shadow: 0 0 40px -14px rgba(245,158,11,0.28); }
+  .shadow-glow-emerald { box-shadow: 0 0 40px -14px rgba(16,185,129,0.28); }
+  .shadow-glow-rose    { box-shadow: 0 0 40px -14px rgba(244,63,94,0.28); }
+
+  /* ── Botão principal ────────────────────────────────────── */
+  /*
+    Substituído o shimmer genérico (via-white traversal) por
+    um highlight de borda superior + glow no hover.
+  */
+  .glow-button {
+    @apply relative overflow-hidden font-bold rounded-2xl text-white
+           flex items-center justify-center gap-2 transition-all duration-300;
+    background: linear-gradient(160deg, #f05252 0%, #b91c1c 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.15) inset,
+      0 8px 20px -4px rgba(239,68,68,0.4);
+  }
+  .glow-button:hover {
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.2) inset,
+      0 14px 30px -4px rgba(239,68,68,0.55);
+    transform: translateY(-1px);
+    background: linear-gradient(160deg, #f87171 0%, #dc2626 100%);
+  }
+  .glow-button:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 4px 12px -4px rgba(239,68,68,0.3);
+  }
+
+  /* ── Botão secundário ───────────────────────────────────── */
+  .glass-button {
+    @apply bg-white/[0.04] border border-white/[0.08] text-slate-400 font-semibold
+           transition-all duration-300 flex items-center justify-center gap-2;
+    border-radius: 16px;
+  }
+  .glass-button:hover {
+    @apply bg-white/[0.08] text-white border-white/[0.14];
+  }
+
+  /* ── Tipografia ─────────────────────────────────────────── */
+  .metric-value {
+    /* JetBrains Mono para valores financeiros — legibilidade e premium */
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    @apply text-4xl font-bold tracking-tighter text-white;
+    font-variant-numeric: tabular-nums;
+  }
+  .metric-title {
+    @apply text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500;
+  }
+  .section-title {
+    @apply text-2xl font-extrabold text-white tracking-tight;
+  }
+
+  /* ── Badges de status com dot pulsante ──────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full
+           text-[10px] font-bold uppercase tracking-widest border
+           transition-all duration-300;
+  }
+  .badge::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+    animation: status-pulse 2.8s ease-in-out infinite;
+  }
+  .badge-success {
+    @apply bg-fin-emerald/[0.08] text-fin-emerald border-fin-emerald/[0.18];
+    box-shadow: 0 0 14px rgba(16,185,129,0.07);
+  }
+  .badge-warning {
+    @apply bg-fin-amber/[0.08] text-fin-amber border-fin-amber/[0.18];
+    box-shadow: 0 0 14px rgba(245,158,11,0.07);
+  }
+  .badge-danger {
+    @apply bg-fin-rose/[0.08] text-fin-rose border-fin-rose/[0.18];
+    box-shadow: 0 0 14px rgba(244,63,94,0.07);
+  }
+  .badge-info {
+    @apply bg-fin-blue/[0.08] text-fin-blue border-fin-blue/[0.18];
+    box-shadow: 0 0 14px rgba(239,68,68,0.07);
+  }
+
+  /* ── Gradient Text ──────────────────────────────────────── */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.45) 100%);
+  }
+  .text-gradient-blue {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #f87171 0%, #dc2626 100%);
+  }
+
+  /* ── Divisor com gradiente (usar no lugar de border-b) ──── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255,255,255,0.07) 20%,
+      rgba(255,255,255,0.07) 80%,
+      transparent 100%);
+  }
+
+  /* ── Animação de entrada ────────────────────────────────── */
+  .animate-fade-up {
+    animation: fade-up 0.4s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  /* ── Input padronizado ──────────────────────────────────── */
+  .input-base {
+    @apply w-full bg-black/40 border border-white/[0.08] text-white font-semibold
+           placeholder:text-slate-700 transition-all duration-300 outline-none;
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.25);
+  }
+  .input-base:focus {
+    border-color: rgba(239,68,68,0.35);
+    box-shadow:
+      inset 0 2px 8px rgba(0,0,0,0.25),
+      0 0 0 3px rgba(239,68,68,0.07);
+  }
+}
