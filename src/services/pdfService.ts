@@ -43,7 +43,7 @@ export const generatePDFReport = async (data: ReportData, period: string) => {
   doc.rect(0, 0, pageWidth, 40, 'F');
   
   doc.setTextColor(255, 255, 255);
-  centerText('Adisson - Gestão de Empréstimos', 15, 10, 'bold');
+  centerText('Kevin - Gestão de Empréstimos', 15, 10, 'bold');
   centerText('RELATÓRIO FINANCEIRO PROFISSIONAL', 25, 18, 'bold');
   centerText(`Período: ${period.toUpperCase()} | Gerado em: ${today} às ${now}`, 34, 10, 'normal');
 
@@ -175,7 +175,7 @@ export const generatePDFReport = async (data: ReportData, period: string) => {
     doc.setPage(i);
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
-    doc.text(`Adisson Financial Report | Gerado em ${today} | Página ${i} de ${totalPages}`, 14, doc.internal.pageSize.getHeight() - 10);
+    doc.text(`Kevin Financial Report | Gerado em ${today} | Página ${i} de ${totalPages}`, 14, doc.internal.pageSize.getHeight() - 10);
   }
 
   const filename = `relatorio_${period}_${new Date().toISOString().split('T')[0]}.pdf`;
@@ -201,7 +201,7 @@ export const generateCollectionsPDF = async (collections: any[]) => {
   doc.rect(0, 0, pageWidth, 40, 'F');
   
   doc.setTextColor(255, 255, 255);
-  centerText('Adisson - Gestão de Empréstimos', 15, 10, 'bold');
+  centerText('Kevin - Gestão de Empréstimos', 15, 10, 'bold');
   centerText('LISTA DE COBRANÇA DIÁRIA', 25, 18, 'bold');
   centerText(`Data: ${today} | Gerado em: ${today} às ${now}`, 34, 10, 'normal');
 
@@ -261,7 +261,7 @@ export const generateCollectionsPDF = async (collections: any[]) => {
     doc.setPage(i);
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
-    doc.text(`Adisson | Lista de Cobrança | Gerado em ${today} | Página ${i} de ${totalPages}`, 14, doc.internal.pageSize.getHeight() - 10);
+    doc.text(`Kevin | Lista de Cobrança | Gerado em ${today} | Página ${i} de ${totalPages}`, 14, doc.internal.pageSize.getHeight() - 10);
   }
 
   const filename = `cobranças_${new Date().toISOString().split('T')[0]}.pdf`;

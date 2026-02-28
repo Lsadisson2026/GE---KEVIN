@@ -138,7 +138,7 @@ export const LoginPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h1 className="text-3xl font-extrabold text-white tracking-tight mb-1">Adisson</h1>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight mb-1">Kevin</h1>
             <p className="text-sm text-slate-500 font-medium tracking-wide">
               Gestão de Empréstimos Privados
             </p>
@@ -328,7 +328,7 @@ export const LoginPage: React.FC = () => {
 
         {/* Rodapé — nome real do produto em vez de "SecureFlow Engine" */}
         <p className="mt-8 text-center text-[10px] font-bold text-slate-700 uppercase tracking-[0.22em]">
-          Adisson · Gestão Financeira Privada
+          Kevin · Gestão Financeira Privada
         </p>
       </motion.div>
     </div>
